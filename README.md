@@ -13,6 +13,7 @@ docker build -t devops22clc/ai-chat:latest -f Dockerfile .
 
 # Run container (detached mode)
 docker run -p 8000:8000 -d devops22clc/ai-chat:latest
+```
 
 ### Local Development
 ```bash
