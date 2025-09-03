@@ -25,7 +25,7 @@ cd geotech-qa
 pip install -r requirements.txt
 
 # Setup environment
-cp env.example .env
+cp .env.example .env
 # Edit .env with your GOOGLE_API_KEY
 
 # Initialize vector store (REQUIRED)
@@ -136,15 +136,34 @@ curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d '{
 ### **Expected Response**
 ```json
 {
-  "answer": "CPT (Cone Penetration Test) analysis is a geotechnical investigation method...",
+  "answer": "CPT analysis uses Cone Penetration Test (CPT) data—cone resistance (qc)...",
   "citations": [
     {
       "source": "cpt_analysis_settle3.md",
-      "confidence": 0.85,
-      "text": "CPT analysis involves..."
+      "confidence": 0.713501363992691,
+      "chunk_id": "cpt_analysis_settle3_chunk_0"
+    },
+    {
+      "source": "settlement_analysis_methods.md",
+      "confidence": 0.6412152051925659,
+      "chunk_id": "settlement_analysis_methods_chunk_1"
+    },
+    {
+      "source": "settle3_help_overview.md",
+      "confidence": 0.632659912109375,
+      "chunk_id": "settle3_help_overview_chunk_1"
     }
   ],
-  "trace_id": "550e8400-e29b-41d4-a716-446655440000"
+  "trace_id": "8186302a-65b0-4719-abf5-5e683d957336",
+  "trace": [
+    {
+      "step_type": "pipeline_execution",
+      "duration_ms": 7242.4333,
+      "details": {
+        "process": "decision_retrieval_compute_synthesis"
+      }
+    }
+  ]
 }
 ```
 
@@ -302,7 +321,7 @@ API_HOST=0.0.0.0
 API_PORT=8000
 LOG_LEVEL=INFO
 MAX_QUESTION_LENGTH=2000
-LLM_TIMEOUT_SECONDS=5.0
+LLM_TIMEOUT_SECONDS=15.0
 ```
 
 ### Tool Parameters
