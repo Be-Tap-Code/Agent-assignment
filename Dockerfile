@@ -1,22 +1,25 @@
 FROM python:3.11-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Install system deps (đủ để build numpy, scipy,…)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ curl build-essential \
+ && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt pyproject.toml ./
+# Copy requirements
+COPY requirements-core.txt requirements-ml.txt pyproject.toml ./
 
-# Install Python dependencies
-RUN pip install -r requirements.txt
+# Install Python deps
+# 1. Core trước (cache tốt hơn)
+RUN pip install --no-cache-dir -r requirements-core.txt -i https://pypi.org/simple
 
-# Copy application code
+# 2. ML deps (torch CPU + faiss CPU)
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+ && pip install --no-cache-dir -r requirements-ml.txt -i https://pypi.org/simple \
+ && rm -rf /root/.cache/pip
+
+# Copy app code
 COPY app/ ./app/
 COPY static/ ./static/
 COPY data/ ./data/
@@ -24,23 +27,18 @@ COPY env.example ./.env
 COPY init_vector_store.py ./
 COPY startup.sh ./
 
-# Create necessary directories
-RUN mkdir -p /app/data/vector_store /app/logs
+# Create dirs + chmod script
+RUN mkdir -p /app/data/vector_store /app/logs \
+ && chmod +x startup.sh
 
-# Make startup script executable
-RUN chmod +x startup.sh
-
-# Set environment variables
 ENV PYTHONPATH=/app
 ENV API_HOST=0.0.0.0
 ENV API_PORT=8000
 
-# Expose port
 EXPOSE 8000
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+  CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the application with startup script
 CMD ["./startup.sh"]
+
