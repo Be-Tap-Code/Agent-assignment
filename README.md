@@ -103,30 +103,6 @@ docker run -p 8000:8000 devops22clc/ai-chat:latest
 docker run -p 8000:8000 -d devops22clc/ai-chat:latest
 ```
 
-## 🔧 Troubleshooting
-
-### **Common Issues**
-
-#### **LLM Timeout Errors**
-```bash
-# If you see "Gemini call timed out" errors:
-# 1. Check your internet connection
-# 2. Verify GOOGLE_API_KEY is set correctly
-# 3. The system will automatically use fallback analysis
-
-# Check logs for details
-docker logs <container_name>
-```
-
-#### **Vector Store Issues**
-```bash
-# If vector store is not initialized:
-# 1. Check if data/vector_store/ directory exists
-# 2. Rebuild container to trigger auto-initialization
-docker-compose down
-docker-compose up --build
-```
-
 #### **API Connection Issues**
 ```bash
 # Test if service is running
