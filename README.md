@@ -101,45 +101,6 @@ docker run -p 8000:8000 devops22clc/ai-chat:latest
 
 # Run container (background/detached)
 docker run -p 8000:8000 -d devops22clc/ai-chat:latest
-
-# List running containers
-docker ps
-
-# List all containers
-docker ps -a
-
-# View container logs
-docker logs <container_id_or_name>
-
-# Stop container
-docker stop <container_id_or_name>
-
-# Remove container
-docker rm <container_id_or_name>
-
-# Remove image
-docker rmi devops22clc/ai-chat:latest
-```
-
-### **Docker Compose Operations**
-```bash
-# Start services
-docker-compose up
-
-# Start services in background
-docker-compose up -d
-
-# Rebuild and start
-docker-compose up --build
-
-# Stop services
-docker-compose down
-
-# View logs
-docker-compose logs
-
-# View logs for specific service
-docker-compose logs geotech-qa
 ```
 
 ## 🔧 Troubleshooting
