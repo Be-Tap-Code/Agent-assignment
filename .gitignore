@@ -46,9 +46,8 @@ coverage.xml
 cover/
 
 # Environments
-# .env
-.venv
 .env
+.venv
 venv/
 ENV/
 env.bak/

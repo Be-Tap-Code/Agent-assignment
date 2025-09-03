@@ -14,22 +14,6 @@ docker build -t devops22clc/ai-chat:latest -f Dockerfile .
 # Run container (detached mode)
 docker run -p 8000:8000 -d devops22clc/ai-chat:latest
 
-# Check container status
-docker ps
-
-# View logs (use container name from docker ps)
-docker logs <container_name>
-
-# Stop container
-docker stop <container_name>
-
-# Or use Docker Compose (Production)
-docker-compose up --build
-
-# For development with hot reload
-docker-compose -f docker-compose.dev.yml up --build
-```
-
 ### Local Development
 ```bash
 # Clone and setup
