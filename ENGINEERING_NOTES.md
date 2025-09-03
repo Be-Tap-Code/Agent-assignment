@@ -502,7 +502,7 @@ venv\Scripts\activate  # Windows
 pip install -r requirements.txt
 
 # Set up environment
-cp env.example .env
+cp .env.example .env
 # Edit .env with your GOOGLE_API_KEY
 
 # Initialize vector store (REQUIRED)
@@ -526,110 +526,15 @@ The vector store is essential for the RAG system to function. It contains:
 4. Build FAISS index for fast similarity search
 5. Save all components to `data/vector_store/`
 
-#### **Testing**
-```bash
-# Run unit tests
-pytest tests/ -v
-
-# Run evaluation
-python run_evaluation.py
-
-# Test API endpoints
-curl http://localhost:8000/health
-curl http://localhost:8000/metrics
-```
 
 ### Docker Deployment
 
-#### **Production Dockerfile**
-```dockerfile
-FROM python:3.11-slim
+# Build Docker image
+docker build -t devops22clc/ai-chat:latest -f Dockerfile .
 
-WORKDIR /app
+# Run container (detached mode)
+docker run -p 8000:8000 -d devops22clc/ai-chat:latest
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc g++ curl && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements and install Python dependencies
-COPY requirements.txt pyproject.toml ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy application code
-COPY app/ ./app/
-COPY static/ ./static/
-COPY data/ ./data/
-COPY init_vector_store.py ./
-COPY startup.production.sh ./
-
-# Create necessary directories
-RUN mkdir -p /app/data/vector_store /app/logs
-
-# Make startup script executable
-RUN chmod +x startup.production.sh
-
-# Set environment variables
-ENV PYTHONPATH=/app
-ENV API_HOST=0.0.0.0
-ENV API_PORT=8000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
-
-# Run application with automatic vector store initialization
-CMD ["./startup.production.sh"]
-```
-
-#### **Startup Script (Production)**
-```bash
-#!/bin/bash
-set -e
-
-echo "🚀 Starting Geotech Q&A Service (Production)"
-
-# Check if vector store exists
-if [ ! -f "/app/data/vector_store/index.faiss" ]; then
-    echo "📚 Vector store not found. Initializing..."
-    python init_vector_store.py
-    echo "✅ Vector store initialized successfully!"
-else
-    echo "✅ Vector store already exists. Skipping initialization."
-fi
-
-# Start the application with Gunicorn
-echo "🌐 Starting FastAPI application with Gunicorn..."
-exec gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
-```
-
-#### **Docker Compose**
-```yaml
-version: '3.8'
-
-services:
-  geotech-qa:
-    build:
-      context: .
-      dockerfile: Dockerfile.production
-    container_name: geotech-qa-service
-    ports:
-      - "8000:8000"
-    environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
-      - LOG_LEVEL=INFO
-    volumes:
-      - ./logs:/app/logs
-      - ./data:/app/data
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-```
 
 ### Monitoring & Maintenance
 
@@ -655,28 +560,6 @@ services:
 - **Vector Store**: Backup FAISS index and metadata
 - **Configuration**: Version control for all config files
 - **Logs**: Centralized logging for analysis
-
----
-
-## Future Improvements
-
-### Short-term (1-3 months)
-1. **Enhanced Chunking**: Implement semantic chunking
-2. **Better Embeddings**: Upgrade to larger, more sophisticated models
-3. **Advanced Filtering**: Add metadata-based filtering
-4. **Caching**: Implement response caching for common questions
-
-### Medium-term (3-6 months)
-1. **Multi-modal Support**: Add image analysis for CPT logs
-2. **Advanced Calculations**: Implement more geotechnical calculations
-3. **User Feedback**: Add feedback mechanism for answer quality
-4. **A/B Testing**: Framework for testing different approaches
-
-### Long-term (6+ months)
-1. **Custom Models**: Fine-tune models on geotechnical data
-2. **Real-time Updates**: Live knowledge base updates
-3. **Integration**: Connect with actual Settle3 software
-4. **Mobile App**: Native mobile application
 
 ---
 
