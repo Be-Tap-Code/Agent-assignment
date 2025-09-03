@@ -6,6 +6,10 @@ A comprehensive geotechnical engineering Q&A service with RAG, computational too
 
 ## 🚀 Quick Start
 
+![Geotech Q&A Chat Interface](UI.png)
+
+*Interactive chat interface for geotechnical engineering Q&A*
+
 ### Docker (Recommended)
 ```bash
 # Build Docker image
