@@ -1,0 +1,168 @@
+[
+  {
+    "question": "How is cone resistance data used in Settle3 CPT analysis?",
+    "expected_answer": "Settle3 uses cone resistance (qc) data to estimate soil strength and settlement characteristics. It is used directly in settlement calculations, in Schmertmann and Mayne & Poulos methods, and to determine soil parameters like Young's modulus, friction angle, and overconsolidation ratio. Normalized cone resistance and friction ratio are also used for soil classification, influencing settlement predictions.",
+    "expected_citations": [
+      {
+        "source": "cpt_analysis_settle3.md",
+        "keywords": [
+          "cone resistance",
+          "qc",
+          "settlement",
+          "Schmertmann",
+          "Mayne & Poulos",
+          "Young's modulus",
+          "friction angle",
+          "overconsolidation ratio",
+          "normalized cone resistance",
+          "friction ratio",
+          "soil classification"
+        ]
+      }
+    ]
+  },
+  {
+    "question": "What soil properties are considered for liquefaction assessment in Settle3?",
+    "expected_answer": "Settle3 considers soil properties such as grain size distribution, plasticity index, relative density or SPT N-values, groundwater conditions, and stress history for liquefaction assessment. It uses corrected SPT N-values or normalized cone resistance depending on the method, and key parameters like cyclic stress ratio, cyclic resistance ratio, factor of safety, and magnitude scaling factor are also accounted for. Post-liquefaction settlement can be estimated using methods such as Ishihara & Yoshimine (1992) and Zhang et al (2002).",
+    "expected_citations": [
+      {
+        "source": "liquefaction_settle3.md",
+        "keywords": [
+          "grain size distribution",
+          "plasticity index",
+          "relative density",
+          "SPT N-values",
+          "groundwater",
+          "stress history",
+          "cyclic stress ratio",
+          "cyclic resistance ratio",
+          "factor of safety",
+          "magnitude scaling factor",
+          "post-liquefaction settlement"
+        ]
+      }
+    ]
+  },
+  {
+    "question": "Where can engineers access Settle3 user manuals and support materials?",
+    "expected_answer": "Settle3 user manuals and help documentation are available through Rocscience, either integrated within the software's help system or directly from the Rocscience website under the Settle3 product support section.",
+    "expected_citations": [
+      {
+        "source": "settle3_help_overview.md",
+        "keywords": [
+          "Settle3",
+          "user manuals",
+          "help documentation",
+          "Rocscience",
+          "support materials",
+          "help system",
+          "website"
+        ]
+      }
+    ]
+  },
+  {
+    "question": "Why is groundwater important in Settle3 liquefaction evaluations?",
+    "expected_answer": "Groundwater conditions are crucial because liquefaction occurs only in saturated granular soils. Settle3 uses groundwater data to determine effective stress, which is key for calculating cyclic stress ratio (CSR), cyclic resistance ratio (CRR), and the factor of safety (FS = CRR/CSR) to assess liquefaction susceptibility.",
+    "expected_citations": [
+      {
+        "source": "liquefaction_settle3.md",
+        "keywords": [
+          "groundwater",
+          "liquefaction",
+          "saturated soil",
+          "effective stress",
+          "CSR",
+          "CRR",
+          "factor of safety",
+          "FS"
+        ]
+      }
+    ]
+  },
+  {
+    "question": "Calculate the immediate settlement of a footing subjected to a load of 400 kN if the soil has a Young’s modulus of 20 MPa.",
+    "expected_answer": "The immediate settlement of the footing is calculated as 0.020 mm using the formula: settlement = load / Young’s modulus. This indicates a very small settlement, suggesting the soil is relatively stiff.",
+    "expected_citations": [
+      {
+        "source": "",
+        "keywords": [
+          "immediate settlement",
+          "footing",
+          "load",
+          "Young’s modulus",
+          "0.020 mm",
+          "formula"
+        ]
+      }
+    ]
+  },
+  {
+    "question": "Determine the ultimate bearing capacity of a strip footing with B = 2 m, Df = 1 m, γ = 18 kN/m³, and φ = 30° using Terzaghi's bearing capacity equation.",
+    "expected_answer": "The ultimate bearing capacity q_ult is 759.60 kPa, calculated using Terzaghi's equation: q_ult = γ*Df*Nq + 0.5*γ*B*Nr, with Nq = 22.50 and Nr = 19.70 for φ = 30°.",
+    "expected_citations": [
+      {
+        "source": "",
+        "keywords": [
+          "ultimate bearing capacity",
+          "q_ult",
+          "Terzaghi",
+          "bearing capacity",
+          "B",
+          "Df",
+          "gamma",
+          "φ",
+          "Nq",
+          "Nr",
+          "759.60 kPa"
+        ]
+      }
+    ]
+  },
+  {
+    "question": "Determine the ultimate bearing capacity of a strip footing with B = 1.5 m, Df = 1.2 m, γ = 19 kN/m³, and φ = 35° using Terzaghi's bearing capacity equation.",
+    "expected_answer": "Ultimate bearing capacity: 1548.12 kPa. This value represents the maximum pressure a strip footing can withstand before failure, calculated using Terzaghi's equation: q_ult = γ*Df*Nq + 0.5*γ*B*Nr. Given soil parameters are γ = 19 kN/m³, φ = 35°, Nq = 41.40, Nr = 42.40.",
+    "expected_citations": [
+      {
+        "source": "",
+        "keywords": [
+          "ultimate bearing capacity",
+          "q_ult",
+          "Terzaghi",
+          "bearing capacity",
+          "B",
+          "Df",
+          "gamma",
+          "φ",
+          "Nq",
+          "Nr",
+          "1548.12 kPa"
+        ]
+      }
+    ]
+  }
+  ,
+  {
+    "question": "Estimate the immediate settlement and assess the ultimate bearing capacity of a strip footing with B = 2 m, Df = 1 m, γ = 18 kN/m³, φ = 30°, and subjected to a load of 500 kN. Use Settle3 methods where applicable.",
+    "expected_answer": "The ultimate bearing capacity of the strip footing is calculated using Terzaghi's bearing capacity equation for cohesionless soil (φ = 30°, c = 0) with Nq = 22.5 and Nγ = 19.7, giving q_ult = 759.6 kPa. The corresponding ultimate load is 1519.2 kN (q_ult × B × 1 m). The applied load of 500 kN is less than the ultimate load, indicating adequate capacity. Immediate settlement calculation cannot be performed without additional soil parameters (e.g., modulus of elasticity), so Settle3 methods cannot be fully applied. A factor of safety of at least 2 is recommended for design.",
+    "expected_citations": [
+      {
+        "source": "bearing_capacity_fundamentals.md",
+        "keywords": [
+          "Terzaghi",
+          "cohesionless",
+          "bearing capacity",
+          "Nq",
+          "Nγ",
+          "q_ult",
+          "B",
+          "Df",
+          "γ",
+          "settlement",
+          "FS",
+          "759.6 kPa"
+        ]
+      }
+    ]
+  }  
+]

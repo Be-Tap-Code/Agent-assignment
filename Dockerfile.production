@@ -1,0 +1,47 @@
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt pyproject.toml ./
+
+# Install Python dependencies (production only)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY app/ ./app/
+COPY static/ ./static/
+COPY data/ ./data/
+COPY env.example ./.env
+COPY init_vector_store.py ./
+COPY startup.production.sh ./
+
+# Create necessary directories
+RUN mkdir -p /app/data/vector_store /app/logs
+
+# Make startup script executable
+RUN chmod +x startup.production.sh
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV API_HOST=0.0.0.0
+ENV API_PORT=8000
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run the application with startup script
+CMD ["./startup.production.sh"]

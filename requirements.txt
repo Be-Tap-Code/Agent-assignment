@@ -1,0 +1,61 @@
+# Core FastAPI and web framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Data validation and serialization
+pydantic>=2.5.0
+pydantic-settings>=2.2.1
+
+
+# HTTP client
+httpx>=0.25.0
+
+# Machine Learning and Embeddings
+sentence-transformers>=2.2.2
+torch>=2.0.0
+transformers>=4.30.0
+
+# Vector database and similarity search
+faiss-cpu>=1.7.4
+
+# Data processing and scientific computing
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.11.0
+
+# Text processing
+markdown>=3.5.0
+
+# Logging
+loguru>=0.7.2
+
+# Agent Orchestration & LLM (CrewAI + Gemini) - PRIMARY
+crewai[yaml]>=0.30.0
+langchain>=0.2.6
+langchain-core>=0.2.6
+langchain-community>=0.2.6
+google-generativeai>=0.7.0
+langchain-google-genai>=1.0.1
+pyyaml>=6.0.1
+
+# Development and testing dependencies
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# Code formatting and linting
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+mypy>=1.6.0
+
+# Additional utilities
+python-dotenv>=1.0.0
+
+# Optional: For GPU support (uncomment if needed)
+# faiss-gpu>=1.7.4
+# torch>=2.0.0+cu118
+
+# Optional: For production deployment
+gunicorn>=21.2.0
