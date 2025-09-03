@@ -332,27 +332,6 @@ LLM_TIMEOUT_SECONDS=15.0
 - **Terzaghi**: Foundation width (B), soil unit weight (γ), depth (Df), friction angle (φ)
 - **Settlement**: Applied load, Young's modulus (E)
 
-## 🧪 Testing
-
-### Run All Tests
-```bash
-pytest -v
-```
-
-### Run Specific Tests
-```bash
-# Tool correctness tests
-pytest tests/test_tools.py -v
-
-# Retriever tests
-pytest tests/test_retriever.py -v
-
-# API tests
-pytest tests/test_api.py -v
-
-# Run evaluation
-python run_evaluation.py
-```
 
 ## 📊 Evaluation
 
@@ -372,16 +351,12 @@ python run_evaluation.py
   "total_questions": 8,
   "hit_at_1": 1.0,
   "hit_at_3": 1.0,
-  "average_keyword_overlap": 0.750,
+  "average_keyword_overlap": 0.6789756484219228,
   "citation_match_rate": 1.0,
-  "average_confidence": 0.725
+  "average_confidence": 0.7768320858478546,
 }
 ```
 
-### Test Coverage
-```bash
-pytest --cov=app --cov-report=html
-```
 
 ## 🎯 Design Choices & Tradeoffs
 
@@ -414,7 +389,7 @@ pytest --cov=app --cov-report=html
 - **Tradeoff**: May be less powerful than OpenAI embeddings
 - **Benefit**: No API costs, works offline
 
-#### **LLM: Gemini vs GPT-4**
+#### **LLM: Gemini**
 - ✅ **Chosen**: Gemini for cost and performance
 - **Tradeoff**: Different prompt engineering needed
 - **Benefit**: Good performance, competitive pricing
@@ -426,7 +401,7 @@ pytest --cov=app --cov-report=html
 - **Tradeoff**: More verbose, requires parsing
 - **Benefit**: Better for production monitoring
 
-#### **Metrics: JSON vs Prometheus**
+#### **Metrics: JSON**
 - ✅ **Chosen**: JSON format for simplicity
 - **Tradeoff**: Less compatible with Prometheus ecosystem
 - **Benefit**: Easier to parse and integrate with custom dashboards
@@ -445,7 +420,7 @@ pytest --cov=app --cov-report=html
   - **Both**: Complex questions requiring both knowledge and calculations
 
 ### Safety & Guardrails
-- **Timeouts**: LLM (5s), Tools (1s) with retry logic
+- **Timeouts**: LLM (15s), Tools (1s) with retry logic
 - **Input Validation**: Max 2000 characters, parameter range checks
 - **Error Handling**: Circuit breaker pattern, graceful degradation
 
@@ -481,10 +456,10 @@ app/
 ## 📈 Performance
 
 ### Benchmarks
-- **Response Time**: ~1-3 seconds for typical questions
-- **Throughput**: ~10-20 requests/second
-- **Memory Usage**: ~500MB base + embeddings
-- **Storage**: ~100MB for knowledge base
+- **Response Time**: ~7-10 seconds for typical questions
+- **Throughput**: ~10-20 requests/minute
+- **Memory Usage**: ~1MB base + embeddings
+- **Storage**: ~1MB for knowledge base
 
 ### Optimization Tips
 - Use connection pooling for database
@@ -519,18 +494,6 @@ Solution: Check input ranges and units
 export LOG_LEVEL=DEBUG
 uvicorn app.main:app --reload
 ```
-
-## 📝 License
-
-MIT License - see LICENSE file for details.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch
-3. Add tests for new functionality
-4. Submit pull request
-
 ## 📞 Support
 
 For issues and questions:
