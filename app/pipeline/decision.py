@@ -83,7 +83,7 @@ Expected JSON:
 {{
   "action": "retrieve",
   "params": {{"B": null,"Df": null,"gamma": null,"phi": null,"load": null,"E": null}},
-  "reasoning": "Theoretical question"
+  "reasoning": "Theoreti`cal question"
 }}
 
 Question: "Calculate settlement for load=100 kN and E=20000 kPa"
@@ -101,8 +101,13 @@ Expected JSON:
 """
 
         try:
-            # Use async method properly
+            # Use async method properly with timeout handling
             response = await self.llm.agenerate(prompt)
+            
+            # Check if response is empty or error message
+            if not response or "I'm experiencing high load" in response or "I'm having trouble" in response:
+                self.logger.warning("⚠️ LLM returned error message, using fallback")
+                return self._fallback_analysis(question, has_numerical)
             
             # Clean and extract JSON from response
             cleaned_response = self._extract_json_from_response(response)
@@ -171,10 +176,20 @@ Expected JSON:
     
     def _fallback_analysis(self, question: str, has_numerical: bool) -> Dict[str, Any]:
         """Fallback analysis when LLM fails."""
-        if has_numerical:
-            action = "both"  # If has numbers, likely needs both theory and calculation
+        question_lower = question.lower()
+        
+        # Smart fallback based on keywords
+        if any(word in question_lower for word in ["calculate", "compute", "determine", "find", "what is the"]):
+            if has_numerical:
+                action = "compute"  # Has numbers and asks for calculation
+            else:
+                action = "retrieve"  # Asks for calculation but no numbers provided
+        elif any(word in question_lower for word in ["what is", "how does", "explain", "describe", "define"]):
+            action = "retrieve"  # Pure knowledge question
+        elif has_numerical:
+            action = "both"  # Has numbers, likely needs both theory and calculation
         else:
-            action = "retrieve"  # Pure theoretical question
+            action = "retrieve"  # Default to knowledge retrieval
         
         return {
             "action": action,
@@ -186,5 +201,5 @@ Expected JSON:
                 "load": None,
                 "E": None
             },
-            "reasoning": f"Fallback analysis: has_numerical={has_numerical}"
+            "reasoning": f"Fallback analysis: has_numerical={has_numerical}, action={action}"
         }

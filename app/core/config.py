@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     llm_provider: str = Field(default="gemini", env="LLM_PROVIDER")
     orchestrator_type: str = Field(default="crew", env="ORCHESTRATOR")
     llm_model: str = Field(default="gemini-1.5-flash", env="LLM_MODEL")
-    llm_timeout_seconds: float = Field(default=5.0, env="LLM_TIMEOUT_SECONDS")
+    llm_timeout_seconds: float = Field(default=15.0, env="LLM_TIMEOUT_SECONDS")
 
     class Config:
         env_file = ".env"

@@ -14,7 +14,7 @@ services:
       - API_PORT=8000
       - LOG_LEVEL=INFO
       - MAX_QUESTION_LENGTH=2000
-      - LLM_TIMEOUT_SECONDS=5.0
+      - LLM_TIMEOUT_SECONDS=15.0
     volumes:
       # Mount logs directory for persistence
       - ./logs:/app/logs
