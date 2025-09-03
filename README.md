@@ -8,9 +8,20 @@ A comprehensive geotechnical engineering Q&A service with RAG, computational too
 
 ### Docker (Recommended)
 ```bash
-# Build and run with Docker
-docker build -t geotech-qa .
-docker run -p 8000:8000 -e GOOGLE_API_KEY=your_api_key_here geotech-qa
+# Build Docker image
+docker build -t devops22clc/ai-chat:latest -f Dockerfile .
+
+# Run container (detached mode)
+docker run -p 8000:8000 -d devops22clc/ai-chat:latest
+
+# Check container status
+docker ps
+
+# View logs (use container name from docker ps)
+docker logs <container_name>
+
+# Stop container
+docker stop <container_name>
 
 # Or use Docker Compose (Production)
 docker-compose up --build
@@ -42,6 +53,20 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ## 📡 API Endpoints
 
 ### Ask a Question
+
+#### **Windows (PowerShell/CMD)**
+```bash
+# General knowledge question
+curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\"question\": \"How is cone resistance data used in Settle3 CPT analysis?\", \"context\": null}"
+
+# Calculation question  
+curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\"question\": \"Calculate the bearing capacity for a 2m wide foundation with soil unit weight 18 kN/m³, depth 1.5m, and friction angle 30°\", \"context\": null}"
+
+# Simple question
+curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\"question\": \"What is CPT analysis?\"}"
+```
+
+#### **Linux/Mac**
 ```bash
 # General knowledge question
 curl -X POST http://localhost:8000/ask \
@@ -58,6 +83,13 @@ curl -X POST http://localhost:8000/ask \
     "question": "Calculate the bearing capacity for a 2m wide foundation with soil unit weight 18 kN/m³, depth 1.5m, and friction angle 30°",
     "context": null
   }'
+
+# Simple question
+curl -X POST http://localhost:8000/ask \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "What is CPT analysis?"
+  }'
 ```
 
 ### Health Check
@@ -72,6 +104,127 @@ curl http://localhost:8000/metrics
 
 ### Web UI
 Open http://localhost:8000 in your browser for the interactive chat interface.
+
+## 🐳 Docker Commands
+
+### **Basic Docker Operations**
+```bash
+# Build image
+docker build -t devops22clc/ai-chat:latest -f Dockerfile .
+
+# Run container (foreground)
+docker run -p 8000:8000 devops22clc/ai-chat:latest
+
+# Run container (background/detached)
+docker run -p 8000:8000 -d devops22clc/ai-chat:latest
+
+# List running containers
+docker ps
+
+# List all containers
+docker ps -a
+
+# View container logs
+docker logs <container_id_or_name>
+
+# Stop container
+docker stop <container_id_or_name>
+
+# Remove container
+docker rm <container_id_or_name>
+
+# Remove image
+docker rmi devops22clc/ai-chat:latest
+```
+
+### **Docker Compose Operations**
+```bash
+# Start services
+docker-compose up
+
+# Start services in background
+docker-compose up -d
+
+# Rebuild and start
+docker-compose up --build
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs
+
+# View logs for specific service
+docker-compose logs geotech-qa
+```
+
+## 🔧 Troubleshooting
+
+### **Common Issues**
+
+#### **LLM Timeout Errors**
+```bash
+# If you see "Gemini call timed out" errors:
+# 1. Check your internet connection
+# 2. Verify GOOGLE_API_KEY is set correctly
+# 3. The system will automatically use fallback analysis
+
+# Check logs for details
+docker logs <container_name>
+```
+
+#### **Vector Store Issues**
+```bash
+# If vector store is not initialized:
+# 1. Check if data/vector_store/ directory exists
+# 2. Rebuild container to trigger auto-initialization
+docker-compose down
+docker-compose up --build
+```
+
+#### **API Connection Issues**
+```bash
+# Test if service is running
+curl http://localhost:8000/health
+
+# Check container status
+docker ps
+
+# View container logs
+docker logs <container_name>
+```
+
+## 🧪 Quick Testing
+
+### **Test API Endpoints**
+```bash
+# Health check
+curl http://localhost:8000/health
+
+# Metrics
+curl http://localhost:8000/metrics
+
+# Simple question (Windows)
+curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\"question\": \"What is CPT analysis?\"}"
+
+# Simple question (Linux/Mac)
+curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d '{"question": "What is CPT analysis?"}'
+```
+
+### **Expected Response**
+```json
+{
+  "answer": "CPT (Cone Penetration Test) analysis is a geotechnical investigation method...",
+  "citations": [
+    {
+      "source": "cpt_analysis_settle3.md",
+      "confidence": 0.85,
+      "text": "CPT analysis involves..."
+    }
+  ],
+  "trace_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
 
 ## 📚 Vector Store Initialization
 
